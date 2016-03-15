@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 </head>
 <body>
-test
+    <input type="button" id='camera' value="相机">
+        <img id="camera-img" src="" alt="相机传来的base64">
+    <br>
+
+    <script>
+        if(!window.Yuta){
+            alert("window.Yuta is"+window.Yuta)
+        }
+
+        $('#camera').click(function(){
+            Yuta.Camera.getPicture(function(picData){
+                $('#camera-img')[0].src=picData
+            },function(err){
+                alert("getPicture failed: "+err)
+            },{
+                destinationType:0
+            })
+        })
+    </script>
 </body>
 </html>
