@@ -41,15 +41,21 @@
             log("window.Yuta is "+window.Yuta)
         }
 
+
+        var callbacks={}
+        callbacks['aa'] = function(bb){
+            alert(bb)
+        }
+
+        window.__meatGodCallback = function(callbackId,args){
+            callbacks[callbackId](args)
+        }
+
+
         $('#camera').click(function(){
-            Yuta.Camera.getPicture(function(picData){
-                $('#camera-img')[0].src=picData
-            },function(err){
-                alert("getPicture failed: "+err)
-            },{
-                destinationType:0
-            })
+            Yuta.Bridge.invoke("getPicture",json.stringify({callbackId:'aa',data:{bb:1}}))
         })
+
 
     </script>
 </body>
