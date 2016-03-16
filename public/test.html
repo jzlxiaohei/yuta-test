@@ -4,15 +4,38 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <style>
+        body{
+            -webkit-overflow-scrolling : touch;
+        }
+        #log-msg{
+            position: fixed;
+            bottom: 0;
+            left:0;right: 0;
+            color:#999;
+            height: 60px;
+            overflow: auto;
+            font-size: 16px;
+            line-height: 20px;
+        }
+    </style>
 </head>
 <body>
-    <input type="button" id='camera' value="相机">
+    <div style="padding-bottom: 60px;">
+        <input type="button" id='camera' value="相机">
         <img id="camera-img" src="" alt="相机传来的base64">
-    <br>
+        <br>
+    </div>
+    <div id="log-msg"></div>
+    <script>
+        function log(msg){
+            $('#log-msg').html(msg)
+        }
 
+    </script>
     <script>
         if(!window.Yuta){
-            alert("window.Yuta is"+window.Yuta)
+            log("window.Yuta is "+window.Yuta)
         }
 
         $('#camera').click(function(){
