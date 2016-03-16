@@ -37,9 +37,6 @@
         }
     </script>
     <script>
-        window.Yuta={Bridge:{
-            invoke:function(){}
-        }}
 
 
         var callbacks={}
@@ -55,7 +52,7 @@
 
 
         $('#camera').click(function(){
-            __JavascriptBridge__.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
+            Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
 //            __JavaJsCallBack('getPicture',JSON.stringify({callbackId:'aa',data:{bb:1}}))
         })
 
