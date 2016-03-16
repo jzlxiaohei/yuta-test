@@ -32,6 +32,9 @@
             $('#log-msg').html(msg)
         }
 
+        window.onerror = function(message, source, lineno) {
+            log('Error: ' + message + ' Script: ' + source + ' Line: ' + lineno)
+        }
     </script>
     <script>
         if(!window.Yuta){
@@ -47,6 +50,7 @@
                 destinationType:0
             })
         })
+
     </script>
 </body>
 </html>
