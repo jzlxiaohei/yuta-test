@@ -53,6 +53,8 @@
 
         $('#camera').click(function(){
             Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
+            window.webkit.messageHandlers.Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
+
 //            __JavaJsCallBack('getPicture',JSON.stringify({callbackId:'aa',data:{bb:1}}))
         })
 
