@@ -14,8 +14,9 @@
     var callBackFns = []
 
     exports['__YutaAppCallback'] = function (cdId, args) {
-        alert('called')
-        log('called')
+        if(typeof args == 'string'){
+            args = JSON.parse(args)
+        }
         callBackFns[cdId](args)
     }
 
