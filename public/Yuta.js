@@ -1,4 +1,7 @@
 !function(exports){
+
+    function noop(){}
+
     var callbackIndex = 1
 
     var callBackFns = []
@@ -7,7 +10,10 @@
         callBackFns[cdId](args)
     }
 
+
     function invokeWrap(methodName,args,fn){
+        args = args||{}
+        fn = fn || noop
         if('callbackId' in args){
             throw new Error(' `callbackId` in args!! should not do this')
         }
@@ -15,7 +21,7 @@
         args['callbackId'] = id
         callBackFns[id] = fn
         callbackIndex++;
-        __YutaJsBridge.invoke(methodName,args)
+        __YutaJsBridge.invoke(methodName,JSON.stringify(args))
     }
 
     function defaultFailFunc(e){
@@ -83,10 +89,29 @@
         getPicture:function(onSuccess,onFail,options){
             wrapSuccessFailFunc({
                 methodName:'Yuta.Camera.getPicture',
-                onSuccess:onSuccess,onFail:onFail,
+                onSuccess:onSuccess,
+                onFail:onFail,
                 args:options})
         }
     }
+
+    Yuta.WebView={
+        close:function(url){
+            invokeWrap('Yuta.WebView.close',url)
+        },
+        closeAll:function(url){
+            invokeWrap('Yuta.WebView.closeAll',url)
+        },
+        load:function(url){
+            invokeWrap('Yuta.WebView.load',url)
+        },
+        open:function(url){
+            invokeWrap('Yuta.WebView.open',url)
+        }
+    }
+
+
+    Yuta.Share
 
     exports.Yuta = Yuta
 }(window)
