@@ -1,5 +1,12 @@
 !function (exports) {
 
+    var ua = navigator.userAgent.toLowerCase()
+    var postMessageEnabled = false
+    if(ua.indexOf('postmessageenabled')!=-1){
+        postMessageEnabled = true
+    }
+
+
     function noop() {
     }
 
@@ -22,7 +29,12 @@
         args['callbackId'] = id
         callBackFns[id] = fn
         callbackIndex++;
-        __YutaJsBridge.invoke(methodName, JSON.stringify(args))
+        if(postMessageEnabled){
+            args['methodName'] = methodName
+            window.webkit.messageHandlers.Yuta.postMessage(JSON.stringify(args))
+        }else{
+            __YutaJsBridge.invoke(methodName, JSON.stringify(args))
+        }
     }
 
     function defaultFailFunc(e) {
@@ -141,4 +153,5 @@
     }
 
     exports.Yuta = Yuta
+
 }(window)
