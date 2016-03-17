@@ -49,11 +49,18 @@
         }
 
 
+        var globalMount = window;
+
+        window.webkit.messageHandlers.__YutaJsBridge.invoke()
+
+        __YutaAppCallBack()
+
 
 
         $('#camera').click(function(){
-            Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
-            window.webkit.messageHandlers.Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
+//            Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
+            window.webkit.messageHandlers
+                    .Yuta.postMessage("getPicture")
 
 //            __JavaJsCallBack('getPicture',JSON.stringify({callbackId:'aa',data:{bb:1}}))
         })
