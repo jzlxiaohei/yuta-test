@@ -61,6 +61,14 @@
             Direction:{
                 Back:0,
                 Front:1
+            },
+            DestinationType:{
+                DATA_URL:0,
+                FILE_URI:1
+            },
+            EncodingType:{
+                JPEG:0,
+                PNG:1
             }
         }
     }

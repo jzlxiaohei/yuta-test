@@ -59,7 +59,11 @@
 //            Yuta.Bridge.invoke("getPicture",JSON.stringify({callbackId:'aa',data:{bb:1}}))
             window.webkit.messageHandlers
                     .Yuta.postMessage("getPicture")
-            log(JSON.stringify(window.webkit.messageHandlers.Yuta))
+            var str =''
+            for(var i in window.webkit.messageHandlers.Yuta){
+                str += i+','
+            }
+            log(str)
 //            __JavaJsCallBack('getPicture',JSON.stringify({callbackId:'aa',data:{bb:1}}))
         })
 
