@@ -14,6 +14,8 @@
     var callBackFns = []
 
     exports['__YutaAppCallback'] = function (cdId, args) {
+        alert('called')
+        log('called')
         callBackFns[cdId](args)
     }
 
@@ -29,8 +31,8 @@
         callBackFns[id] = fn
         callbackIndex++;
         if (postMessageEnabled) {
-            args['methodName'] = methodName
-            window.webkit.messageHandlers.__YutaJsBridge.postMessage(JSON.stringify(args))
+            var newObj = {methodName: methodName, args: args}
+            window.webkit.messageHandlers.__YutaJsBridge.postMessage(JSON.stringify(newObj))
         } else {
             __YutaJsBridge.invoke(methodName, JSON.stringify(args))
         }

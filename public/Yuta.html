@@ -7,7 +7,6 @@
     <meta content="telephone=no" name="format-detection">
     <title>Yuta test</title>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
-    <script src="Yuta.js"></script>
     <style>
         body{
             -webkit-overflow-scrolling : touch;
@@ -51,6 +50,8 @@
         log('Error: ' + message + ' Script: ' + source + ' Line: ' + lineno)
     }
 </script>
+<script src="Yuta.js"></script>
+
 <script>
     $('#camera').click(function(){
         Yuta.Camera.getPicture(function(e){
