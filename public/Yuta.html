@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yuta test</title>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script src="Yuta.js"></script>
+    <style>
+        body{
+            -webkit-overflow-scrolling : touch;
+        }
+        #log-msg{
+            position: fixed;
+            bottom: 0;
+            left:0;right: 0;
+            color:#999;
+            height: 60px;
+            overflow: auto;
+            font-size: 16px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body>
+<div style="padding-bottom: 60px;">
+    <input type="button" id='camera' value="相机">
+    <img id="camera-img" src="" alt="相机传来的base64">
+    <br>
+</div>
+<div id="log-msg"></div>
+<script>
+    function log(msg){
+        $('#log-msg').html(msg)
+    }
+
+    window.onerror = function(message, source, lineno) {
+        log('Error: ' + message + ' Script: ' + source + ' Line: ' + lineno)
+    }
+</script>
+<script>
+    $('#camera').click(function(){
+        Yuta.Camera.getPicture(function(e){
+            log(e)
+        },function(e){
+            log(e)
+        },{
+            cameraDirection:Yuta.Constant.Camera.Direction.Back
+        })
+    })
+
+
+</script>
+</body>
+</html>

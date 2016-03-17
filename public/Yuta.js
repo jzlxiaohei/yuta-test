@@ -28,23 +28,28 @@
      * onFail:function,
      * args:{}
      */
-    function generateSuccessFailFunc(options){
+    function wrapSuccessFailFunc(options){
+        var methodName = options.methodName,
+            args = options.args
+        if(!methodName){
+            throw new Error('methodName is required')
+        }
         if(typeof options.onSuccess !== 'function'){
-            throw new Error('onSuccess must be provided')
+            throw new Error('onSuccess is required')
         }
         options.onFail = options.onFail || defaultFailFunc()
-        return function (){
-            invokeWrap('Yuta.Camera.getPicture',options,function(args){
-                var msg = args['message']
-                if(msg == Constant.MsgSuccess){
-                    options.onSuccess(args[Constant.Results])
-                }else if(msg == Constant.MsgFail){
-                    options.onFail(args[Constant.Results])
-                }else{
-                    console.warn('unknown message type ')
-                }
-            })
-        }
+
+        invokeWrap(options.methodName,args,function(args){
+            var msg = args['message']
+            if(msg == Constant.MsgSuccess){
+                options.onSuccess(args[Constant.Results])
+            }else if(msg == Constant.MsgFail){
+                options.onFail(args[Constant.Results])
+            }else{
+                console.warn('unknown message type ')
+            }
+        })
+
     }
 
 
@@ -54,7 +59,8 @@
         Results:'results',
         Camera:{
             Direction:{
-                Back:1
+                Back:0,
+                Front:1
             }
         }
     }
@@ -64,21 +70,15 @@
      */
     var Yuta = {}
 
-
-
+    Yuta.Constant = Constant
     Yuta.Camera={
         getPicture:function(onSuccess,onFail,options){
-            invokeWrap('Yuta.Camera.getPicture',options,function(args){
-                var msg = args['message']
-                if(msg == Constant.MsgSuccess){
-                    onSuccess(args[Constant.Results])
-                }else if(msg == Constant.MsgFail){
-                    onFail(args[Constant.Results])
-                }else{
-                    console.warn('unknown message type ')
-                }
-            })
+            wrapSuccessFailFunc({
+                methodName:'Yuta.Camera.getPicture',
+                onSuccess:onSuccess,onFail:onFail,
+                args:options})
         }
     }
 
+    exports.Yuta = Yuta
 }(window)
