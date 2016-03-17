@@ -29,14 +29,17 @@
      * args:{}
      */
     function generateSuccessFailFunc(options){
+        if(typeof options.onSuccess !== 'function'){
+            throw new Error('onSuccess must be provided')
+        }
         options.onFail = options.onFail || defaultFailFunc()
         return function (){
             invokeWrap('Yuta.Camera.getPicture',options,function(args){
                 var msg = args['message']
                 if(msg == Constant.MsgSuccess){
-                    onSuccess(args[Constant.Results])
+                    options.onSuccess(args[Constant.Results])
                 }else if(msg == Constant.MsgFail){
-                    onFail(args[Constant.Results])
+                    options.onFail(args[Constant.Results])
                 }else{
                     console.warn('unknown message type ')
                 }
