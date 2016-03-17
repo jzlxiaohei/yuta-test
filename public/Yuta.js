@@ -2,10 +2,9 @@
 
     var ua = navigator.userAgent.toLowerCase()
     var postMessageEnabled = false
-    if(ua.indexOf('postmessageenabled')!=-1){
+    if (ua.indexOf('postmessageenabled') != -1) {
         postMessageEnabled = true
     }
-
 
     function noop() {
     }
@@ -23,16 +22,16 @@
         args = args || {}
         fn = fn || noop
         if ('callbackId' in args) {
-            throw new Error(' `callbackId` in args!! should not do this')
+            throw new Error('`callbackId` in args!! should not do this')
         }
         var id = callbackIndex.toString();
         args['callbackId'] = id
         callBackFns[id] = fn
         callbackIndex++;
-        if(postMessageEnabled){
+        if (postMessageEnabled) {
             args['methodName'] = methodName
-            window.webkit.messageHandlers.Yuta.postMessage(JSON.stringify(args))
-        }else{
+            window.webkit.messageHandlers.__YutaJsBridge.postMessage(JSON.stringify(args))
+        } else {
             __YutaJsBridge.invoke(methodName, JSON.stringify(args))
         }
     }
