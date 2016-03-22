@@ -18,6 +18,7 @@
             args = JSON.parse(args)
         }
         callBackFns[cdId](args)
+        delete callBackFns[cdId]
     }
 
 
