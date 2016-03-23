@@ -39,6 +39,8 @@
     <input type="button" id="share-img" value="image分享">
     <br>
     <input type="button" id="open" value="open webview">
+
+    <img id="img">
 </div>
 <div id="log-msg"></div>
 <script>
@@ -55,7 +57,7 @@
 <script>
     $('#camera').click(function(){
         Yuta.Camera.getPicture(function(e){
-            log(e)
+            $('#img')[0].src='data:image/jpeg;base64,'+e.data
         },function(e){
             log(e)
         },{
