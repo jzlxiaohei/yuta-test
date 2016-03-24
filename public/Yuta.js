@@ -201,29 +201,37 @@
         },
         //{message:'ok'|'cancel'}
         confirm: function (message, okCallback, title, okButtonName, cancelButtonName, cancelCallback) {
-            var args = {message: message}
+            if (typeof okCallback !== 'function') {
+                throw new Error('okCallback(second param) is required')
+            }
+
+            var args = {
+                methodName: 'Yuta.Dialogs.confirm',
+                message: message,
+                onOk: okCallback,
+                onCancel: cancelCallback
+            }
             if (title) args.title = title
             if (okButtonName) args.okButtonName = okButtonName
             if (cancelButtonName) args.cancelButtonName = cancelButtonName
-            wrapOkCancelFunc(okCallback, cancelCallback, {
-                methodName: 'Yuta.Dialogs.confirm',
-                onOk: okCallback,
-                onCancel: cancelCallback,
-                args: args
-            })
+            wrapOkCancelFunc(args)
         },
         prompt: function (message, okCallback, defaultValue, title, okButtonName, cancelButtonName, cancelCallback) {
-            var args = {message: message}
+            if (typeof okCallback !== 'function') {
+                throw new Error('okCallback(second param) is required')
+            }
+
+            var args = {
+                methodName: 'Yuta.Dialogs.prompt',
+                message: message,
+                onOk: okCallback,
+                onCancel: cancelCallback
+            }
             if (defaultValue) args.defaultValue = defaultValue
             if (title) args.title = title
             if (okButtonName) args.okButtonName = okButtonName
             if (cancelButtonName) args.cancelButtonName = cancelButtonName
-            wrapOkCancelFunc(okCallback, cancelCallback, {
-                methodName: 'Yuta.Dialogs.prompt',
-                onOk: okCallback,
-                onCancel: cancelCallback,
-                args: args
-            })
+            wrapOkCancelFunc(args)
         },
         toast: function (message, duration) {
             var args = {message: message, duration: duration || 1200}

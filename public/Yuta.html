@@ -39,12 +39,21 @@
     <input type="button" id="share-img" value="image分享">
     <br>
     <input type="button" id="open" value="open webview">
+    <br>
+    <input type="button" id="getType" value="网络类型">
+    <br>
+    <input type="button" id="device" value="设备属性">
+    <br>
+    <input type="button" id="confirm" value="confirm框">
 
     <img id="img">
 </div>
 <div id="log-msg"></div>
 <script>
     function log(msg){
+        if(typeof msg == 'object'){
+            msg = JSON.stringify(msg,2)
+        }
         $('#log-msg').html(msg)
     }
 
@@ -75,6 +84,28 @@
     $('#open').click(function(){
         Yuta.WebView.open("http://wallstreetcn.com")
     })
+
+    $('#getType').click(function(){
+        Yuta.Connection.getType(function (obj) {
+            log(obj)
+        })
+    })
+
+    $('#device').click(function(){
+        Yuta.Device.getProperties(function (obj) {
+            log(obj)
+        })
+    })
+
+    $('#confirm').click(function () {
+        Yuta.Dialogs.confirm("我长的帅吗",function(obj){
+            log(obj)
+        },'标题','确认','取消',function (obj) {
+            log(obj)
+        })
+
+    })
+
 </script>
 </body>
 </html>
