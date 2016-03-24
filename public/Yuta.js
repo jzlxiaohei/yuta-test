@@ -1,4 +1,26 @@
 !function (exports) {
+    var Constant = {
+        MsgSuccess: 'success',
+        MsgFail: 'fail',
+        MsgOk: 'ok',
+        MsgCancel: 'cancel',
+        Results: 'results',
+        Camera: {
+            Direction: {
+                Back: 0,
+                Front: 1
+            },
+            DestinationType: {
+                DATA_URL: 0,
+                FILE_URI: 1
+            },
+            EncodingType: {
+                JPEG: 0,
+                PNG: 1
+            }
+        }
+    }
+
 
     var ua = navigator.userAgent.toLowerCase()
     var postMessageEnabled = false
@@ -14,7 +36,7 @@
     var callBackFns = []
 
     exports['__YutaAppCallback'] = function (cdId, args) {
-        if(typeof args == 'string'){
+        if (typeof args == 'string') {
             args = JSON.parse(args)
         }
         callBackFns[cdId](args)
@@ -28,10 +50,10 @@
         if ('callbackId' in args) {
             throw new Error('`callbackId` in args!! should not do this')
         }
-        var id = callbackIndex.toString();
+        var id = callbackIndex.toString()
         args['callbackId'] = id
         callBackFns[id] = fn
-        callbackIndex++;
+        callbackIndex++
         if (postMessageEnabled) {
             var newObj = {methodName: methodName, args: args}
             window.webkit.messageHandlers.__YutaJsBridge.postMessage(JSON.stringify(newObj))
@@ -71,29 +93,32 @@
                 console.warn('unknown message type ')
             }
         })
-
     }
 
-
-    var Constant = {
-        MsgSuccess: 'success',
-        MsgFail: 'fail',
-        Results: 'results',
-        Camera: {
-            Direction: {
-                Back: 0,
-                Front: 1
-            },
-            DestinationType: {
-                DATA_URL: 0,
-                FILE_URI: 1
-            },
-            EncodingType: {
-                JPEG: 0,
-                PNG: 1
-            }
+    function wrapOkCancelFunc(options) {
+        var methodName = options.methodName,
+            args = options.args
+        if (!methodName) {
+            throw new Error('methodName is required')
         }
+        if (typeof options.onOk !== 'function') {
+            throw new Error('onOk is required')
+        }
+        options.onCancel = options.onCancel || defaultFailFunc()
+
+        invokeWrap(options.methodName, args, function (args) {
+            var msg = args['message']
+            if (msg == Constant.MsgOk) {
+                options.onOk()
+            } else if (msg == Constant.MsgCancel) {
+                options.onCancel()
+            } else {
+                //TODO emit event
+                console.warn('unknown message type ')
+            }
+        })
     }
+
 
     /**
      * Yuta Object
@@ -131,12 +156,11 @@
     Yuta.Share = {
         image: function (image, url, title, content, callback) {
             invokeWrap('Yuta.Share.image', {
-                    image: image,
-                    url: url,
-                    title: title,
-                    content: content
-                }, callback
-            )
+                image: image,
+                url: url,
+                title: title,
+                content: content
+            }, callback)
         },
         video: function (url, thumb, title, callback) {
             invokeWrap('Yuta.Share.video', {
@@ -152,6 +176,58 @@
                 title: title,
                 author: author
             }, callback)
+        }
+    }
+
+
+    Yuta.Device = {
+        getProperties: function (callback) {
+            invokeWrap('Yuta.Device.getProperties', {}, callback)
+        }
+    }
+
+    Yuta.Connection = {
+        getType: function (callback) {
+            invokeWrap('Yuta.Connection.getType', {}, callback)
+        }
+    }
+
+    Yuta.Dialogs = {
+        alert: function (message, okCallBack, title, okButtonName) {
+            var args = {message: message}
+            if (title) args.title = title
+            if (okButtonName) args.okButtonName = okButtonName
+            invokeWrap('Yuta.Dialogs.alert', args, okCallBack)
+        },
+        //{message:'ok'|'cancel'}
+        confirm: function (message, okCallback, title, okButtonName, cancelButtonName, cancelCallback) {
+            var args = {message: message}
+            if (title) args.title = title
+            if (okButtonName) args.okButtonName = okButtonName
+            if (cancelButtonName) args.cancelButtonName = cancelButtonName
+            wrapOkCancelFunc(okCallback, cancelCallback, {
+                methodName: 'Yuta.Dialogs.confirm',
+                onOk: okCallback,
+                onCancel: cancelCallback,
+                args: args
+            })
+        },
+        prompt: function (message, okCallback, defaultValue, title, okButtonName, cancelButtonName, cancelCallback) {
+            var args = {message: message}
+            if (defaultValue) args.defaultValue = defaultValue
+            if (title) args.title = title
+            if (okButtonName) args.okButtonName = okButtonName
+            if (cancelButtonName) args.cancelButtonName = cancelButtonName
+            wrapOkCancelFunc(okCallback, cancelCallback, {
+                methodName: 'Yuta.Dialogs.prompt',
+                onOk: okCallback,
+                onCancel: cancelCallback,
+                args: args
+            })
+        },
+        toast: function (message, duration) {
+            var args = {message: message, duration: duration || 1200}
+            invokeWrap('Yuta.Dialogs.toast', args)
         }
     }
 
