@@ -162,11 +162,11 @@
                 content: content
             }, callback)
         },
-        image: function(image,title,callback){
-            invokeWrap("Yuta.Share.image",{
-                image:image,
-                title:title
-            },callback)
+        image: function (image, title, callback) {
+            invokeWrap("Yuta.Share.image", {
+                image: image,
+                title: title
+            }, callback)
         },
         video: function (url, thumb, title, callback) {
             invokeWrap('Yuta.Share.video', {
