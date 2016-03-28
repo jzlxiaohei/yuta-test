@@ -112,6 +112,8 @@
     <br>
     <input type="button" id="confirm" value="confirm框">
 
+    <input type="button" id="alert" value="alert框">
+
     <img id="img">
 </div>
 <div id="log-msg"></div>
@@ -183,6 +185,11 @@
 
     })
 
+    $('#alert').click(function(){
+        Yuta.Dialogs.alert("我就是我,是不一样的烟花",function(obj){
+            log(obj)
+        },'一个标题','确认')
+    })
 </script>
 </body>
 </html>
