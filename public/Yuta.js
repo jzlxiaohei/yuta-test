@@ -154,13 +154,19 @@
 
 
     Yuta.Share = {
-        image: function (image, url, title, content, callback) {
-            invokeWrap('Yuta.Share.image', {
+        web: function (image, url, title, content, callback) {
+            invokeWrap('Yuta.Share.web', {
                 image: image,
                 url: url,
                 title: title,
                 content: content
             }, callback)
+        },
+        image: function(image,title,callback){
+            invokeWrap("Yuta.Share.image",{
+                image:image,
+                title:title
+            },callback)
         },
         video: function (url, thumb, title, callback) {
             invokeWrap('Yuta.Share.video', {
