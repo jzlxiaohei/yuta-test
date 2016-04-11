@@ -45,20 +45,20 @@
 
 
     function invokeWrap(methodName, args, fn) {
-        args = args || {}
+        var innerArgs = shadowClone(args)
         fn = fn || noop
-        if ('callbackId' in args) {
+        if ('callbackId' in innerArgs) {
             throw new Error('`callbackId` in args!! should not do this')
         }
         var id = callbackIndex.toString()
-        args['callbackId'] = id
+        innerArgs['callbackId'] = id
         callBackFns[id] = fn
         callbackIndex++
         if (postMessageEnabled) {
-            var newObj = {methodName: methodName, args: args}
+            var newObj = {methodName: methodName, args: innerArgs}
             window.webkit.messageHandlers.__YutaJsBridge.postMessage(JSON.stringify(newObj))
         } else {
-            __YutaJsBridge.invoke(methodName, JSON.stringify(args))
+            __YutaJsBridge.invoke(methodName, JSON.stringify(innerArgs))
         }
     }
 
@@ -123,7 +123,9 @@
     /**
      * Yuta Object
      */
-    var Yuta = {}
+    var Yuta = {
+        isWscnApp: ua.indexOf('wscnapp') != -1
+    }
 
     Yuta.Constant = Constant
     Yuta.Camera = {
@@ -245,6 +247,26 @@
         }
     }
 
+    Yuta.User = {
+        login: function (username, password, callback) {
+
+        }
+    }
+
     exports.Yuta = Yuta
+
+
+    function shadowClone(obj) {
+        if (typeof obj !== 'object') {
+            return {}
+        }
+        var cloneObj = {}
+        for (var i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                cloneObj[i] = obj[i]
+            }
+        }
+        return cloneObj
+    }
 
 }(window)
